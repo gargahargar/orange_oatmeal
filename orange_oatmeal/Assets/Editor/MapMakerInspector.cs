@@ -10,6 +10,7 @@ public class MapMakerInspector : Editor
 {
     MapMaker myMapMaker;
     bool createRooms = false;
+    bool createSpaces = false;
 
     private void OnSceneGUI()
     {
@@ -18,7 +19,7 @@ public class MapMakerInspector : Editor
             myMapMaker = (MapMaker)target;
         }
                
-        if (createRooms)
+        if ( createRooms || createSpaces)
         {
             Event e = Event.current;
             if(e.type == EventType.MouseUp)
@@ -30,10 +31,18 @@ public class MapMakerInspector : Editor
                     RaycastHit hit;
                     if (Physics.Raycast(ray, out hit))
                     {
-                        myMapMaker.createRoom(new Vector3(hit.point.x, 0, hit.point.z));
+                        if(hit.collider.gameObject.tag == "Ground" && createRooms)
+                        {
+                            myMapMaker.CreateRoom(new Vector3(hit.point.x, 0, hit.point.z), hit.collider.gameObject);
 
-                        EditorUtility.SetDirty(myMapMaker);
-                        EditorUtility.SetDirty(myMapMaker.gameObject);
+
+                        }else if(hit.collider.gameObject.tag == "Room" && createSpaces)
+                        {
+                            myMapMaker.CreateSpace(new Vector3(hit.point.x, 0, hit.point.z), hit.collider.gameObject);
+
+                            EditorUtility.SetDirty(myMapMaker);
+                            EditorUtility.SetDirty(myMapMaker.gameObject);
+                        }
                     }
                 }
             }
@@ -45,17 +54,21 @@ public class MapMakerInspector : Editor
         GUILayout.BeginHorizontal("box");
 
 
-        if (GUILayout.Button("Create Room Object On Click = " + createRooms))
+        if (GUILayout.Button("Create Room = " + createRooms))
         {
             createRooms = !createRooms;
         }
-        if (GUILayout.Button("PurgeEmpties"))
+        if (GUILayout.Button("Create Space = " + createSpaces))
         {
-            myMapMaker.createdRooms = myMapMaker.createdRooms.Where(item => item != null).ToList();
+            createSpaces = !createSpaces;
         }
 
         GUILayout.EndHorizontal();
-
+        if (GUILayout.Button("PurgeEmpties"))
+        {
+            myMapMaker.createdRooms = myMapMaker.createdRooms.Where(item => item != null).ToList();
+            myMapMaker.createdSpaces = myMapMaker.createdSpaces.Where(item => item != null).ToList();
+        }
 
         DrawDefaultInspector();
 

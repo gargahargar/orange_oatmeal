@@ -6,6 +6,7 @@ using UnityEditor;
 using System;
 
 [CustomEditor(typeof(RoomScript))]
+//[ExecuteInEditMode]
 public class RoomInspector : Editor
 {
     RoomScript myRoomScript;
@@ -15,20 +16,33 @@ public class RoomInspector : Editor
         if (myRoomScript == null)
         {
             myRoomScript = (RoomScript)target;
-        }
+        }    
     }
-
     public override void OnInspectorGUI()
     {
-        //GUILayout.BeginHorizontal("box");
-        foreach (TerrainType terrain in Enum.GetValues(typeof(TerrainType)))
+        string[] names = Enum.GetNames(typeof(TerrainType));
+        TerrainType[] values = (TerrainType[])Enum.GetValues(typeof(TerrainType));
+
+        GUILayout.BeginHorizontal("box");
+        for (int j = 1; j < names.Length/2+1; j++)
         {
-            if (GUILayout.Button(terrain.ToString()))
+            if (GUILayout.Button(names[j]))
             {
-                myRoomScript.setRoomTerrainType(terrain);
+                myRoomScript.setRoomTerrainType(values[j]);
             }
         }
+        GUILayout.EndHorizontal();
 
+        GUILayout.BeginHorizontal("box");
+        for (int j = 1+names.Length/2; j < names.Length; j++)
+        {
+            if (GUILayout.Button(names[j]))
+            {
+                myRoomScript.setRoomTerrainType(values[j]);
+            }
+        }
+        GUILayout.EndHorizontal();
+        
         DrawDefaultInspector();
     }
 }
