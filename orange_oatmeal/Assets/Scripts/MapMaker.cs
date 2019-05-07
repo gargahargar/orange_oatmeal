@@ -23,12 +23,11 @@ public class MapMaker : MonoBehaviour
         }
     }
 
-    public void CreateRoom(Vector3 pos, GameObject groundBase)
+    public void CreateRoom(Vector3 pos)
     {
         pos = GetNearestPosition(pos);
 
-        GameObject g = Instantiate(roomPrefab, pos, Quaternion.identity);
-        g.transform.parent = groundBase.transform;
+        GameObject g = Instantiate(roomPrefab, pos, Quaternion.identity);       
         createdRooms.Add(g);
     }
     public void CreateSpace(Vector3 pos, GameObject roomBase)

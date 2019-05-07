@@ -6,20 +6,40 @@ using UnityEditor;
 using System;
 
 [CustomEditor(typeof(RoomScript))]
-//[ExecuteInEditMode]
 public class RoomInspector : Editor
 {
     RoomScript myRoomScript;
-
+    int width, height;
+    
     private void OnSceneGUI()
     {
         if (myRoomScript == null)
         {
             myRoomScript = (RoomScript)target;
-        }    
+            width = myRoomScript.getWidth();
+            height = myRoomScript.getHeight();
+        }
     }
     public override void OnInspectorGUI()
     {
+        if (myRoomScript == null)
+        {
+            myRoomScript = (RoomScript)target;
+            width = myRoomScript.getWidth();
+            height = myRoomScript.getHeight();
+        }
+        GUILayout.BeginHorizontal("box");
+        
+        width = EditorGUILayout.DelayedIntField("Width:", width);
+        height = EditorGUILayout.DelayedIntField("Height:", height);
+        GUILayout.EndHorizontal();
+
+        if (GUILayout.Button("Set Size"))
+        {
+            myRoomScript.setSize(width, height);
+        }
+
+
         string[] names = Enum.GetNames(typeof(TerrainType));
         TerrainType[] values = (TerrainType[])Enum.GetValues(typeof(TerrainType));
 

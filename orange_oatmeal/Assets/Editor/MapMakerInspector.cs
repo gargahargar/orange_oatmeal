@@ -14,6 +14,7 @@ public class MapMakerInspector : Editor
 
     private void OnSceneGUI()
     {
+        // This was on the unity tutorial for how to do a basic custom editor script so i didnt change it
         if(myMapMaker == null)
         {
             myMapMaker = (MapMaker)target;
@@ -33,7 +34,7 @@ public class MapMakerInspector : Editor
                     {
                         if(hit.collider.gameObject.tag == "Ground" && createRooms)
                         {
-                            myMapMaker.CreateRoom(new Vector3(hit.point.x, 0, hit.point.z), hit.collider.gameObject);
+                            myMapMaker.CreateRoom(new Vector3(hit.point.x, 0, hit.point.z));
 
 
                         }else if(hit.collider.gameObject.tag == "Room" && createSpaces)
@@ -64,6 +65,8 @@ public class MapMakerInspector : Editor
         }
 
         GUILayout.EndHorizontal();
+
+
         if (GUILayout.Button("PurgeEmpties"))
         {
             myMapMaker.createdRooms = myMapMaker.createdRooms.Where(item => item != null).ToList();
