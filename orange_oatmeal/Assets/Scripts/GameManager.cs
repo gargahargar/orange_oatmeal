@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -7,11 +8,18 @@ public class GameManager : MonoBehaviour
 {
     public int maxMessages = 25;
     [SerializeField]
-    string username = "Kevin";
+//    string username = "Kevin";
+    
+    PlayerScript ps;
+
     public GameObject chatPanel, textObject; 
     public InputField chatBox;
-    public Color playerMessageColor;
-    public Color infoMessageColor;
+    public Color commandColor;
+    public Color infoColor;
+    public Color roomTitleColor;
+    public Color roomDescColor;
+    public Color spaceTitleColor;
+    public Color spaceDescColor;
 
     [SerializeField]
     List<Message> messageList = new List<Message>();
@@ -19,9 +27,45 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        ps = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerScript>();
     }
-
+    private void ProcessCommand(string command)
+    {
+        command = command.ToUpper();
+        for(int i = 0; i < 12; i++)
+        {
+            if (command.Equals(Enum.GetName(typeof(Exit), i)))
+            {
+                List<string> outputList = ps.Move(i);
+                if (outputList.Count == 1) // Cant move command
+                    SendMessageToChat(outputList[0], Message.MessageType.info);
+                else if (outputList.Count == 2) // New Space
+                {
+                    SendMessageToChat(outputList[0], Message.MessageType.spacetitle);
+                 //   SendMessageToChat(outputList[1], Message.MessageType.spacedescription);
+                }
+                else if (outputList.Count == 4) // new Room and new space
+                {
+                    SendMessageToChat(outputList[0], Message.MessageType.roomtitle);
+                    SendMessageToChat(outputList[1], Message.MessageType.roomdescription);
+                    SendMessageToChat(outputList[2], Message.MessageType.spacetitle);
+                 //   SendMessageToChat(outputList[3], Message.MessageType.spacedescription);
+                }
+            }
+        }
+        if(command.Equals("LS"))
+        {
+            List<string> outputList = ps.LookSpace();
+            SendMessageToChat(outputList[0], Message.MessageType.spacetitle);
+            SendMessageToChat(outputList[1], Message.MessageType.spacedescription);
+        }
+        if (command.Equals("LR"))
+        {
+            List<string> outputList = ps.LookRoom();
+            SendMessageToChat(outputList[0], Message.MessageType.roomtitle);
+            SendMessageToChat(outputList[1], Message.MessageType.roomdescription);
+        }
+    }
     // Update is called once per frame
     void Update() {
 
@@ -29,7 +73,8 @@ public class GameManager : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.Return))
             {
-                SendMessageToChat(username+ ": " + chatBox.text, Message.MessageType.player);
+                SendMessageToChat(": " + chatBox.text, Message.MessageType.command);
+                ProcessCommand(chatBox.text);
                 chatBox.text = "";
                 chatBox.ActivateInputField();
             }
@@ -40,15 +85,6 @@ public class GameManager : MonoBehaviour
                 chatBox.ActivateInputField();
             }
         }
-
-        if(!chatBox.isFocused) {
-            if (Input.GetKeyDown(KeyCode.Space))
-            {
-                
-                SendMessageToChat("You hit the orc for " + Random.Range(13, 34) +" damage!", Message.MessageType.info);
-            }
-        }
-
     }
 
     public void SendMessageToChat(string text, Message.MessageType messageType)
@@ -72,19 +108,30 @@ public class GameManager : MonoBehaviour
 
     Color MessageTypedColor(Message.MessageType messageType)
     {
-        Color color = infoMessageColor;
+        Color color = infoColor;
         switch (messageType)
         {
-            case Message.MessageType.player:
-                color = playerMessageColor;
+            case Message.MessageType.command:
+                color = commandColor;
                 break;
             case Message.MessageType.info:
-                color = infoMessageColor;
+                color = infoColor;
+                break;
+            case Message.MessageType.roomtitle:
+                color = roomTitleColor;
+                break;
+            case Message.MessageType.roomdescription:
+                color = roomDescColor;
+                break;
+            case Message.MessageType.spacetitle:
+                color = spaceTitleColor;
+                break;
+            case Message.MessageType.spacedescription:
+                color = spaceDescColor;
                 break;
             default:
                 break;
         }
-
         return color;
     }
 }
@@ -98,8 +145,12 @@ public class Message
 
     public enum MessageType
     {
-        player,
-        info
+        command,
+        info,
+        roomtitle,
+        roomdescription,
+        spacetitle,
+        spacedescription
     }
 
 }

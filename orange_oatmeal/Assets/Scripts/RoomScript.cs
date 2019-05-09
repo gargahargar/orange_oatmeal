@@ -6,7 +6,9 @@ using UnityEngine;
 public class RoomScript : MonoBehaviour
 {
     private Renderer rend;
-    private string roomName;
+    [SerializeField]
+    private string roomTitle;
+    [SerializeField]
     private string roomDescription;
     [SerializeField]
     private TerrainType terrain;
@@ -17,7 +19,7 @@ public class RoomScript : MonoBehaviour
 
     public void Start()
     {
-        Debug.Log("In start of roomscript");
+        
         width = (int)transform.localScale.x;
         height = (int)transform.localScale.z;
 
@@ -33,14 +35,27 @@ public class RoomScript : MonoBehaviour
         terrainColors.Add(Color.black);
         terrainColors.Add(Color.cyan);
         terrainColors.Add(Color.magenta);
+
+        if (roomTitle == "")
+            roomTitle = "ROOM";
+        if (roomDescription == "")
+            roomDescription = "NO DESC FOR THIS ROOM";
     }
-    public void setRoomName(string s)
+    public void setRoomTitle(string s)
     {
-        roomName = s;
+        roomTitle = s;
+    }
+    public string GetRoomTitle()
+    {
+        return roomTitle;
     }
     public void setRoomDescription(string s)
     {
         roomDescription = s;
+    }
+    public string GetRoomDescription()
+    {
+        return roomDescription;
     }
     public void setRoomTerrainType(TerrainType t)
     {
@@ -48,6 +63,10 @@ public class RoomScript : MonoBehaviour
         Material tempMaterial = new Material(rend.sharedMaterial);
         tempMaterial.color = terrainColors[(int)t];
         rend.sharedMaterial = tempMaterial;
+    }
+    public TerrainType getRoomTerrainType()
+    {
+        return terrain;
     }
     public void setSize(int w, int h)
     {
@@ -75,10 +94,7 @@ public class RoomScript : MonoBehaviour
     {
         return height;
     }
-    public TerrainType getRoomTerrainType()
-    {
-        return terrain;
-    }
+
 }
 public enum TerrainType
 {

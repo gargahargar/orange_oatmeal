@@ -28,11 +28,11 @@ public class RoomInspector : Editor
             width = myRoomScript.getWidth();
             height = myRoomScript.getHeight();
         }
-        GUILayout.BeginHorizontal("box");
+        EditorGUILayout.BeginHorizontal("box");
         
         width = EditorGUILayout.DelayedIntField("Width:", width);
         height = EditorGUILayout.DelayedIntField("Height:", height);
-        GUILayout.EndHorizontal();
+        EditorGUILayout.EndHorizontal();
 
         if (GUILayout.Button("Set Size"))
         {

@@ -9,8 +9,8 @@ using UnityEngine;
 public class MapMakerInspector : Editor
 {
     MapMaker myMapMaker;
-    bool createRooms = false;
-    bool createSpaces = false;
+    bool createRooms = true;
+    bool createSpaces = true;
 
     private void OnSceneGUI()
     {
@@ -35,12 +35,23 @@ public class MapMakerInspector : Editor
                         if(hit.collider.gameObject.tag == "Ground" && createRooms)
                         {
                             myMapMaker.CreateRoom(new Vector3(hit.point.x, 0, hit.point.z));
+                            EditorUtility.SetDirty(myMapMaker);
+                            EditorUtility.SetDirty(myMapMaker.gameObject);
 
-
-                        }else if(hit.collider.gameObject.tag == "Room" && createSpaces)
+                        }
+                        else if(hit.collider.gameObject.tag == "Room" && createSpaces)
                         {
-                            myMapMaker.CreateSpace(new Vector3(hit.point.x, 0, hit.point.z), hit.collider.gameObject);
+                            myMapMaker.CreateSpace(new Vector3(hit.point.x, 0, hit.point.z), hit.collider.gameObject.transform);
 
+                            EditorUtility.SetDirty(myMapMaker);
+                            EditorUtility.SetDirty(myMapMaker.gameObject);
+                        }else if(hit.collider.gameObject.tag == "Space" && createSpaces)
+                        {
+                            Transform roomTransform = hit.collider.transform;
+                            while(roomTransform.gameObject.tag != "Room")
+                                roomTransform = roomTransform.parent.transform;
+
+                            myMapMaker.CreateSpace(hit.point, roomTransform);
                             EditorUtility.SetDirty(myMapMaker);
                             EditorUtility.SetDirty(myMapMaker.gameObject);
                         }
@@ -52,7 +63,7 @@ public class MapMakerInspector : Editor
 
     public override void OnInspectorGUI()
     {
-        GUILayout.BeginHorizontal("box");
+        EditorGUILayout.BeginHorizontal("box");
 
 
         if (GUILayout.Button("Create Room = " + createRooms))
@@ -64,7 +75,7 @@ public class MapMakerInspector : Editor
             createSpaces = !createSpaces;
         }
 
-        GUILayout.EndHorizontal();
+        EditorGUILayout.EndHorizontal();
 
 
         if (GUILayout.Button("PurgeEmpties"))
