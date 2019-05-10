@@ -5,6 +5,9 @@ using UnityEngine;
 [ExecuteInEditMode]
 public class ExitLineDelete : MonoBehaviour
 {
+
+
+
     // This is called if deleted
     private void OnDestroy()
     {

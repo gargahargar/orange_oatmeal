@@ -65,8 +65,7 @@ public class SpaceScript : MonoBehaviour
             rs = transform.parent.gameObject.GetComponent<RoomScript>();
         return rs;
     }
-
-
+    
     public void DrawExitLine(GameObject g, int position)
     {        
         if(!(g == null))
@@ -133,7 +132,7 @@ public class SpaceScript : MonoBehaviour
             SetExit(hit.transform.gameObject, Exit.E);
         if (Physics.Raycast(transform.position, new Vector3(1, 0, -1), out hit, 2f))
             SetExit(hit.transform.gameObject, Exit.SE);
-        if (Physics.Raycast(transform.position, new Vector3(0, 1, 0), out hit, .3f))
+        if (Physics.Raycast(transform.position, new Vector3(0, 1, 0), out hit, 1.5f))
             SetExit(hit.transform.gameObject, Exit.UP);
         if (Physics.Raycast(transform.position, new Vector3(0, 0, -1), out hit, 2f))
             SetExit(hit.transform.gameObject, Exit.S);
@@ -143,7 +142,7 @@ public class SpaceScript : MonoBehaviour
             SetExit(hit.transform.gameObject, Exit.W);
         if (Physics.Raycast(transform.position, new Vector3(-1, 0, 1), out hit, 2f))
             SetExit(hit.transform.gameObject, Exit.NW);
-        if (Physics.Raycast(transform.position, new Vector3(0, -1, 0), out hit, .3f))
+        if (Physics.Raycast(transform.position, new Vector3(0, -1, 0), out hit, 1.5f))
             SetExit(hit.transform.gameObject, Exit.D);
     }
     public void SetExit(GameObject go, Exit e)

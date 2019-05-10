@@ -11,6 +11,7 @@ public class MapMakerInspector : Editor
     MapMaker myMapMaker;
     bool createRooms = true;
     bool createSpaces = true;
+    float distanceBetweenVerticalSpace = 1f;
 
     private void OnSceneGUI()
     {
@@ -51,7 +52,7 @@ public class MapMakerInspector : Editor
                             while(roomTransform.gameObject.tag != "Room")
                                 roomTransform = roomTransform.parent.transform;
 
-                            myMapMaker.CreateSpace(hit.point, roomTransform);
+                            myMapMaker.CreateSpace(hit.point + new Vector3(0, distanceBetweenVerticalSpace, 0), roomTransform);
                             EditorUtility.SetDirty(myMapMaker);
                             EditorUtility.SetDirty(myMapMaker.gameObject);
                         }
@@ -80,8 +81,8 @@ public class MapMakerInspector : Editor
 
         if (GUILayout.Button("PurgeEmpties"))
         {
-            myMapMaker.createdRooms = myMapMaker.createdRooms.Where(item => item != null).ToList();
-            myMapMaker.createdSpaces = myMapMaker.createdSpaces.Where(item => item != null).ToList();
+            myMapMaker.createdRooms = myMapMaker.createdRooms.Where(item => !(item == null)).ToList();
+            myMapMaker.createdSpaces = myMapMaker.createdSpaces.Where(item => !(item == null)).ToList();
         }
 
         DrawDefaultInspector();

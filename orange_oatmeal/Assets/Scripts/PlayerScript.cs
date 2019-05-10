@@ -6,6 +6,7 @@ public class PlayerScript : MonoBehaviour
 {
     RoomScript rs;
     SpaceScript ss;
+    [SerializeField] float playerToSpaceOffsetHeight;
     [SerializeField]GameObject CurrentSpace;
     // Start is called before the first frame update
     private void Start()
@@ -68,7 +69,7 @@ public class PlayerScript : MonoBehaviour
     {
         if(CurrentSpace != null)
         {
-            transform.position = new Vector3(CurrentSpace.transform.position.x, transform.position.y, CurrentSpace.transform.position.z);
+            transform.position = new Vector3(CurrentSpace.transform.position.x, CurrentSpace.transform.position.y+playerToSpaceOffsetHeight, CurrentSpace.transform.position.z);
         }
     }
 }

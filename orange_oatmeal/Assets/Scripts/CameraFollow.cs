@@ -4,8 +4,10 @@ using UnityEngine;
 public class CameraFollow : MonoBehaviour
 {
     public GameObject objectToFollow;
+    [SerializeField] float height;
 
-    public float speed = .2f;
+    [SerializeField] float speed = .2f;
+
     public void Start()
     {
         objectToFollow = GameObject.FindGameObjectWithTag("Player");
@@ -15,8 +17,9 @@ public class CameraFollow : MonoBehaviour
         float interpolation = speed * Time.deltaTime;
 
         Vector3 position = this.transform.position;
-        position.z = Mathf.Lerp(this.transform.position.z, objectToFollow.transform.position.z, interpolation);
-        position.x = Mathf.Lerp(this.transform.position.x, objectToFollow.transform.position.x, interpolation);
+        position.z = Mathf.Lerp(transform.position.z, objectToFollow.transform.position.z, interpolation);
+        position.y = Mathf.Lerp(transform.position.y, objectToFollow.transform.position.y + height, interpolation);
+        position.x = Mathf.Lerp(transform.position.x, objectToFollow.transform.position.x, interpolation);
 
         this.transform.position = position;
     }
