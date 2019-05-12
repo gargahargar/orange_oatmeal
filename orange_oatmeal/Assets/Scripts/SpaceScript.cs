@@ -19,6 +19,8 @@ public class SpaceScript : MonoBehaviour
     [SerializeField]
     string spaceDescription;
 
+    [SerializeField] List<GameObject> residents;
+
     RoomScript rs;
     
     private void Start()
@@ -81,6 +83,10 @@ public class SpaceScript : MonoBehaviour
         }
         
     }
+    public void AddMeToResidents(GameObject newResident)
+    {
+        residents.Add(newResident);
+    }
     public void RecalculateExitsFromExistingLines()
     {
         for(int i = 0; i < exits.Length; i++)
@@ -119,7 +125,10 @@ public class SpaceScript : MonoBehaviour
             }
         }
     }
-
+    public List<GameObject> GetResidents()
+    {
+        return residents;
+    }
     public void ScanForExits()
     {
         GameObject[] foundexits = new GameObject[12];
@@ -133,7 +142,7 @@ public class SpaceScript : MonoBehaviour
         if (Physics.Raycast(transform.position, new Vector3(1, 0, -1), out hit, 2f))
             SetExit(hit.transform.gameObject, Exit.SE);
         if (Physics.Raycast(transform.position, new Vector3(0, 1, 0), out hit, 1.5f))
-            SetExit(hit.transform.gameObject, Exit.UP);
+            SetExit(hit.transform.gameObject, Exit.U);
         if (Physics.Raycast(transform.position, new Vector3(0, 0, -1), out hit, 2f))
             SetExit(hit.transform.gameObject, Exit.S);
         if (Physics.Raycast(transform.position, new Vector3(-1, 0, -1), out hit, 2f))
@@ -179,5 +188,5 @@ public class SpaceScript : MonoBehaviour
 }
 public enum Exit
 {
-    N, NE, E, SE, IN, UP, S, SW, W, NW, OUT, D
+    N, NE, E, SE, I, U, S, SW, W, NW, O, D
 }

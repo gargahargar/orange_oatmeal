@@ -49,6 +49,31 @@ public class PlayerScript : MonoBehaviour
         return result;
     }
 
+    public List<string> Attack(int i)
+    {
+        List<string> result = new List<string>();
+        if (ss.exits[i] != null)
+        {
+            GameObject attackSpace = ss.exits[i];
+            SpaceScript attackSpaceScript = attackSpace.GetComponent<SpaceScript>();
+
+            // check if the room has an enemy to hit
+            List<GameObject> targets = attackSpaceScript.GetResidents();
+            if (targets.Count != 0)
+            {
+                result.Add("Attack Succeeds");
+                result.Add("You deal 4 Damage");
+            }
+            else
+                result.Add("There is no one to Attack in that space");
+        }
+        else
+            result.Add("There is no exit in that direction.");
+
+        return result;
+    }
+
+
     public List<string> LookSpace()
     {
         List<string> result = new List<string>();

@@ -15,7 +15,7 @@ public class RoomScript : MonoBehaviour
     int width;
     int height;
 
-    List<Color> terrainColors;
+    [SerializeField] List<Material> terrainColors;
 
     public void Start()
     {
@@ -25,16 +25,7 @@ public class RoomScript : MonoBehaviour
 
         rend = GetComponent<Renderer>();
 
-        terrainColors = new List<Color>();
-        terrainColors.Add(Color.white);
-        terrainColors.Add(Color.green);
-        terrainColors.Add(Color.blue);
-        terrainColors.Add(Color.red);
-        terrainColors.Add(Color.yellow);
-        terrainColors.Add(Color.grey);
-        terrainColors.Add(Color.black);
-        terrainColors.Add(Color.cyan);
-        terrainColors.Add(Color.magenta);
+      //  terrainColors = new List<Color>();
 
         if (roomTitle == "")
             roomTitle = "ROOM";
@@ -61,7 +52,7 @@ public class RoomScript : MonoBehaviour
     {
         terrain = t;
         Material tempMaterial = new Material(rend.sharedMaterial);
-        tempMaterial.color = terrainColors[(int)t];
+      //  tempMaterial.color = terrainColors[(int)t];
         rend.sharedMaterial = tempMaterial;
     }
     public TerrainType getRoomTerrainType()

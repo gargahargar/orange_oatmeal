@@ -20,6 +20,7 @@ public class GameManager : MonoBehaviour
     public Color roomDescColor;
     public Color spaceTitleColor;
     public Color spaceDescColor;
+    public Color attackColor;
 
     [SerializeField]
     List<Message> messageList = new List<Message>();
@@ -32,6 +33,7 @@ public class GameManager : MonoBehaviour
     private void ProcessCommand(string command)
     {
         command = command.ToUpper();
+
         for(int i = 0; i < 12; i++)
         {
             if (command.Equals(Enum.GetName(typeof(Exit), i)))
@@ -64,6 +66,29 @@ public class GameManager : MonoBehaviour
             List<string> outputList = ps.LookRoom();
             SendMessageToChat(outputList[0], Message.MessageType.roomtitle);
             SendMessageToChat(outputList[1], Message.MessageType.roomdescription);
+        }
+
+        // Multiword processing
+        string[] multiCommand = command.Split(' ');
+        if (multiCommand.Length == 2)
+        {
+            if (multiCommand[0].Equals("J"))
+            {
+                for (int i = 0; i < 12; i++)
+                {
+                    if (multiCommand[1].Equals(Enum.GetName(typeof(Exit), i)))
+                    {
+                        List<string> outputList = ps.Attack(i);
+                        if (outputList.Count == 1) // no attack
+                            SendMessageToChat(outputList[0], Message.MessageType.info);
+                        else if (outputList.Count == 2) // attack succeed
+                        {
+                            SendMessageToChat(outputList[0], Message.MessageType.attack);
+                            SendMessageToChat(outputList[1], Message.MessageType.attack);
+                        }
+                    }
+                }
+            }
         }
     }
     // Update is called once per frame
@@ -129,6 +154,9 @@ public class GameManager : MonoBehaviour
             case Message.MessageType.spacedescription:
                 color = spaceDescColor;
                 break;
+            case Message.MessageType.attack:
+                color = attackColor;
+                break;
             default:
                 break;
         }
@@ -150,7 +178,8 @@ public class Message
         roomtitle,
         roomdescription,
         spacetitle,
-        spacedescription
+        spacedescription,
+        attack
     }
 
 }

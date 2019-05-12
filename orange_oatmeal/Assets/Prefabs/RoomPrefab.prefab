@@ -104,4 +104,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 719ed43967b41b14cb9a7bf77ce866a4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  terrain: 0
+  roomTitle: ROOM
+  roomDescription: NO DESC FOR THIS ROOM
+  terrain: 8
