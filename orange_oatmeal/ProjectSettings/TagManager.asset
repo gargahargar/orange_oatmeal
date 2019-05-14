@@ -3,7 +3,11 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Room
+  - Ground
+  - Space
+  - ColorData
   layers:
   - Default
   - TransparentFX
